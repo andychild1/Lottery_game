@@ -29,82 +29,107 @@ class Player:
 
   def __init__(self, name):
     self.name = name
+    self.game_mode = ''
+    self.bet = 1
+    self.prize = 0
     self.wheels = []
     self.numbers = []
 
+  def set_bet(self, bet):
+    self.bet = bet
+    
+  def set_prize(self, prize):
+    self.prize = prize
+  
+  def set_game_mode(self, mode):
+    self.game_mode = mode
+
+
 def check_guessed_numbers():
-  player_entries = []
-  for key in wheel.entries:
-    for wheels in player.wheels:
-      if key == wheels:
-        player_entries.append(wheel.entries[key])
-  print(player_entries)
-  for numbers in player_entries:
-    num_to_string = str(numbers)
-    print(numbers)
-    if player.numbers in num_to_string:
-      print("you have an entry")
-
-
-def get_player_numbers():
-  print("Choose up to 10 numbers between 1 and 99\n digit 'done' to confirm: ")
-  while len(player.numbers) < 10:
-    player_numbers = input()
-    if player_numbers == "done":
-      print(player.numbers)
-      print(player.wheels)
-      # when the player is done with the numbers
-      # extraction of numbers start
-      wheel.get_numbers()
-      wheel.populate_numbers()
-      wheel.populate_entries()
-      # check if player guessed a number
-      check_guessed_numbers()
-    else:
-       player.numbers.append(player_numbers)
-
-
-
-
-
+  for keys in wheel.entries:
+    for city in player.wheels:
+      if keys == city:
+        for number in player.numbers:
+          if wheel.entries[city].count(number) >= 1 and player.game_mode == "single":
+            if len(player.numbers) == 10:
+              prize = (1.12 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 9:
+              prize = (1.25 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 8:
+              prize = (1.40 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 7:
+              prize = (1.60 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 6:
+              prize = (1.87 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 5:
+              prize = (2.25 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 4:
+              prize = (2.81 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 3:
+              prize = (3.74 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 2:
+              prize = (5.62 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            elif len(player.numbers) == 1:
+              prize = (11.23 * int(player.bet)) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+str(prize))
+            print(keys, wheel.entries[city])
+            break
+          elif wheel.entries[city].count(number) >= 2 and player.game_mode == "ambo":
+            if len(player.numbers) == 10:
+              prize = (5.56 * player.bet) / (len(player.wheels) +1)
+              player.set_prize(prize)
+              print("You just won "+"$ "+prize)
 
 player_input = input("Welcome to the Italian Lottery!\nEnter your name: ")
 # player is instantiated
 player = Player(player_input)
 print("Welcome " + player.name + "...")
-# get the player wheels to play with
-string_wheels = ''
-for names in wheel.wheels:
-  string_wheels += names + ' '
+# player choose the bet size
+bet = input("Choose you bet from $1 up to $200: ")
+player.set_bet(bet)
+game_mode = input("Choose a 'Game Mode' from 'single', 'ambo', 'terno', 'quaterna', 'cinquina': ")
+player.set_game_mode(game_mode)
+cities = ' '.join(wheel.wheels)
 
-print("Choose up to 10 wheels from: " + string_wheels + "digit 'done' to confirm")
-while len(player.wheels) < 10:
-  wheels_input = input()
-  if wheels_input == "done":
-    get_player_numbers()
+print("Choose up to 10 cities from: " + cities + ". Digit 'done' to confirm")
+wheels_input = input("Enter the cities separated by commas: ")
+player.wheels = [s.strip() for s in wheels_input.split(",")]
+print(player.wheels)
+print("Choose up to 10 numbers between 1 and 99: ")
+player_numbers_input = input("Enter the numbers separated by commas: ")
+player.numbers = [s.strip() for s in player_numbers_input.split(",")]
+integer_conversion = [int(n) for n in player.numbers]
+player.numbers = integer_conversion
+
+# numbers are exctracted from cities
+wheel.get_numbers()
+wheel.populate_numbers()
+wheel.populate_entries()
+# check player guesses
+check_guessed_numbers()
+
+print(player.numbers)
+print(player.wheels)
+print(wheel.entries)
     
-  elif wheels_input == "Bari":
-    player.wheels.append(wheels_input)
-    print(player.wheels)
-  elif wheels_input == "Cagliari":
-    player.wheels.append(wheels_input)
-  elif wheels_input == "Firenze":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Genova":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Milano":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Napoli":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Palermo":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Roma":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Torino":
-     player.wheels.append(wheels_input)
-  elif wheels_input == "Venezia":
-     player.wheels.append(wheels_input)
-  else:
-    print("Enter a valid wheel")
 
 
